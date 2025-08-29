@@ -1,17 +1,17 @@
-const ATOM_URL = "";
-const SITE_URL = "";
+const ATOM_URL = "{{ATOM_URL}}";
+const SITE_URL = "{{SITE_URL}}";
 
 const DEBUG_MODE = true;
 
-const TEST_WEBHOOK_URL = "";
+const TEST_WEBHOOK_URL = "{{SITE_URL}}";
 
-const MAIN_WEBHOOK_URL = "";
+const MAIN_WEBHOOK_URL = "{{MAIN_WEBHOOK_URL}}";
 
 const WEBHOOK_URL = DEBUG_MODE ? TEST_WEBHOOK_URL : MAIN_WEBHOOK_URL;
 
 // アクセス先の情報
-const USER_ID = "";
-const PASSWORD = "";
+const USER_ID = "{{USER_ID}}";
+const PASSWORD = "{{PASSWORD}}";
 
 // GETメソッドのオプション
 const options = {
