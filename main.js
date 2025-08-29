@@ -3,7 +3,7 @@ const SITE_URL = "{{SITE_URL}}";
 
 const DEBUG_MODE = true;
 
-const TEST_WEBHOOK_URL = "{{SITE_URL}}";
+const TEST_WEBHOOK_URL = "{{TEST_WEBHOOK_URL}}";
 
 const MAIN_WEBHOOK_URL = "{{MAIN_WEBHOOK_URL}}";
 
