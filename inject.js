@@ -1,7 +1,7 @@
 const fs = require("fs");
 const main = fs.readFileSync("main.js", "utf-8");
 
-const placeHolders = main.match(/(?<=\{\{)[A-Z_]+(?=\}\})/g);
+const placeHolders = main.match(/(?<=\{\{)\w+(?=\}\})/g);
 
 const replacePlaceHolders = (str, keys) => {
   if (keys.length === 0) {
