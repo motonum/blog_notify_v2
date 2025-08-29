@@ -67,13 +67,12 @@ function main() {
         summary: entry
           .getChild("summary", ns)
           .getText()
-          .replace(/\&.+\;/g, ""),
+          .replace(/\&.+\;/g, "")
+          .replace(/\s+/g, " "),
         url: entry.getChild("id", ns).getText(),
       };
     })
     .reduce((prev, curr) => (prev.issued > curr.issued ? prev : curr));
-
-  const summary = latest.summary.replace(/\s+/g, " ");
 
   postDiscord(`### ${latest.title}\n${summary}\n${latest.url}`);
 }
