@@ -30,6 +30,20 @@ class ExDate extends Date {
     this.setMilliseconds(ms);
     return this;
   }
+  isWithinLast24Hours(date) {
+    const MILLISECONDS_PER_SECOND = 1000;
+    const SECONDS_PER_MINUTE = 60;
+    const MINUTES_PER_HOUR = 60;
+    const HOURS_PER_DAY = 24;
+
+    const MILLISECONDS_PER_DAY =
+      MILLISECONDS_PER_SECOND *
+      SECONDS_PER_MINUTE *
+      MINUTES_PER_HOUR *
+      HOURS_PER_DAY;
+
+    return (date - this) / MILLISECONDS_PER_DAY < 1;
+  }
 }
 
 function refreshTrigger() {
@@ -74,5 +88,7 @@ function main() {
     })
     .reduce((prev, curr) => (prev.issued > curr.issued ? prev : curr));
 
-  postDiscord(`### ${latest.title}\n${summary}\n${latest.url}`);
+  if (latest.issued.isWithinLast24Hours(new ExDate().setTime(8))) {
+    postDiscord(`### ${latest.title}\n${latest.summary}\n${latest.url}`);
+  }
 }
