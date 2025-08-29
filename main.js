@@ -23,22 +23,11 @@ const options = {
 };
 
 class ExDate extends Date {
-  toFormattedString() {
-    return this.toLocaleString("ja-JP", {
-      month: "short",
-      day: "numeric",
-      weekday: "short",
-    });
-  }
-  omitTime() {
-    this.setHours(0);
-    this.setMinutes(0);
-    this.setSeconds(0);
-    this.setMilliseconds(0);
-    return this;
-  }
-  shiftDate(days = 1) {
-    this.setDate(this.getDate() + days);
+  setTime(h = 0, m = 0, s = 0, ms = 0) {
+    this.setHours(h);
+    this.setMinutes(m);
+    this.setSeconds(s);
+    this.setMilliseconds(ms);
     return this;
   }
 }
@@ -50,8 +39,7 @@ function refreshTrigger() {
     .forEach((trigger) => {
       ScriptApp.deleteTrigger(trigger);
     });
-  const now = new Date();
-  const next = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 8, 0);
+  const next = new ExDate().setTime(8);
   ScriptApp.newTrigger("main").timeBased().at(next).create();
 }
 
@@ -74,7 +62,7 @@ function main() {
   const latest = entries
     .map((entry) => {
       return {
-        issued: new Date(entry.getChild("issued", ns).getText()),
+        issued: new ExDate(entry.getChild("issued", ns).getText()),
         title: entry.getChild("title", ns).getText(),
         summary: entry
           .getChild("summary", ns)
