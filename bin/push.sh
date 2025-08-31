@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd "$(dirname $0)/.."
+
 if [[ -z `git status -s` ]]; then
   echo "exec 'git push'"
   git push

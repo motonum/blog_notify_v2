@@ -2,4 +2,3 @@
 
 cd gas
 clasp push
-cd ..
