@@ -1,16 +1,27 @@
 const fs = require("fs");
-const main = fs.readFileSync("main.js", "utf-8");
+const mainContent = fs.readFileSync("main.js", "utf-8");
 
-const placeHolders = main.match(/(?<=\{\{)\w+(?=\}\})/g);
+try {
+  const placeholders = [
+    ...(new Set(mainContent.match(/(?<=\{\{)\w+(?=\}\})/g)) || []),
+  ];
 
-const replacePlaceHolders = (str, keys) => {
-  if (keys.length === 0) {
-    return str;
-  }
-  const newStr = str.replace(`{{${keys[0]}}}`, process.env[keys[0]]);
-  return replacePlaceHolders(newStr, keys.slice(1));
-};
+  const replacementParams = placeholders.map((key) => {
+    const value = process.env[key];
+    if (!value) {
+      throw new Error(`Environment variable "${key}" is not defined.`);
+    }
+    return [key, value];
+  });
 
-const dist = replacePlaceHolders(main, placeHolders);
+  const dist = replacementParams.reduce(
+    (acc, [key, value]) => acc.replace(new RegExp(`{{${key}}}`, "g"), value),
+    mainContent
+  );
 
-fs.writeFileSync("dist.js", dist);
+  fs.writeFileSync("dist.js", dist);
+  console.log("dist.js has been generated successfully");
+} catch (error) {
+  console.error(`Failed to generate dist.js: ${error.message}`);
+  process.exit(1);
+}
