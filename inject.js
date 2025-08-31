@@ -19,8 +19,11 @@ try {
     mainContent
   );
 
-  fs.writeFileSync("dist.js", dist);
-  console.log("dist.js has been generated successfully");
+  if (!fs.existsSync("gas")) {
+    fs.mkdirSync("gas");
+  }
+  fs.writeFileSync("gas/main.js", dist);
+  console.log("gas/main.js has been generated successfully.");
 } catch (error) {
   console.error(`Failed to generate dist.js: ${error.message}`);
   process.exit(1);
