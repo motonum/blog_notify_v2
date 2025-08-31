@@ -62,7 +62,7 @@ function main() {
     method: "GET",
     headers: {
       Authorization:
-        " Basic " + Utilities.base64Encode(USER_ID + ":" + PASSWORD),
+        "Basic " + Utilities.base64Encode(USER_ID + ":" + PASSWORD),
     },
     muteHttpExceptions: true,
   }).getContentText();
