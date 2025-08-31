@@ -47,17 +47,7 @@ function refreshTrigger() {
   ScriptApp.newTrigger("main").timeBased().at(next).create();
 }
 
-function postDiscord(message) {
-  UrlFetchApp.fetch(WEBHOOK_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    payload: JSON.stringify({ content: `${message}` }),
-  });
-}
-
-function main() {
+function getLatestEntry() {
   const atomXml = UrlFetchApp.fetch(ATOM_URL, {
     method: "GET",
     headers: {
@@ -85,7 +75,23 @@ function main() {
     })
     .reduce((prev, curr) => (prev.issued > curr.issued ? prev : curr));
 
-  if (latest.issued.isWithinLast24Hours(new ExDate().setTime(8))) {
+  return latest;
+}
+
+function postDiscord(message) {
+  UrlFetchApp.fetch(WEBHOOK_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    payload: JSON.stringify({ content: `${message}` }),
+  });
+}
+
+function main() {
+  const latest = getLatestEntry();
+
+  if (latest && latest.issued.isWithinLast24Hours(new ExDate().setTime(8))) {
     postDiscord(`### ${latest.title}\n${latest.summary}\n${latest.url}`);
   }
 }
