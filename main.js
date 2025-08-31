@@ -1,5 +1,5 @@
 // デバッグモード切り替え
-const DEBUG_MODE = true;
+const DEBUG_MODE = "{{DEBUG_MODE}}";
 
 // 入出力用情報
 const ATOM_URL = "{{ATOM_URL}}";

@@ -1,5 +1,21 @@
+const OPTION_DEV = "--dev";
+const OPTION_PROD = "--prod";
+
+const option = process.argv[2];
+
+if (!option || [OPTION_DEV, OPTION_PROD].every((e) => e !== option)) {
+  console.error(
+    `Error: Please specify "--dev" or "--prod" as command line argument.`
+  );
+  process.exit(1);
+}
+
+const debugMode = option === OPTION_DEV;
+
 const fs = require("fs");
-const mainContent = fs.readFileSync("main.js", "utf-8");
+const mainContent = fs
+  .readFileSync("main.js", "utf-8")
+  .replace(/"\{\{DEBUG_MODE\}\}"/g, `${debugMode}`);
 
 try {
   const placeholders = [
@@ -25,6 +41,6 @@ try {
   fs.writeFileSync("gas/main.js", dist);
   console.log("gas/main.js has been generated successfully.");
 } catch (error) {
-  console.error(`Failed to generate dist.js: ${error.message}`);
+  console.error(`Failed to generate gas/main.js: ${error.message}`);
   process.exit(1);
 }
