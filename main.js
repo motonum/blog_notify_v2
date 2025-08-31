@@ -1,26 +1,27 @@
-const ATOM_URL = "{{ATOM_URL}}";
-const SITE_URL = "{{SITE_URL}}";
-
+// デバッグモード切り替え
 const DEBUG_MODE = true;
 
+// 入出力用情報
+const ATOM_URL = "{{ATOM_URL}}";
+const SITE_URL = "{{SITE_URL}}";
 const TEST_WEBHOOK_URL = "{{TEST_WEBHOOK_URL}}";
-
 const MAIN_WEBHOOK_URL = "{{MAIN_WEBHOOK_URL}}";
-
 const WEBHOOK_URL = DEBUG_MODE ? TEST_WEBHOOK_URL : MAIN_WEBHOOK_URL;
 
-// アクセス先の情報
 const USER_ID = "{{USER_ID}}";
 const PASSWORD = "{{PASSWORD}}";
 
-// GETメソッドのオプション
-const options = {
-  method: "GET",
-  headers: {
-    Authorization: " Basic " + Utilities.base64Encode(USER_ID + ":" + PASSWORD),
-  },
-  muteHttpExceptions: true,
-};
+// 時間計算用定数
+const MILLISECONDS_PER_SECOND = 1000;
+const SECONDS_PER_MINUTE = 60;
+const MINUTES_PER_HOUR = 60;
+const HOURS_PER_DAY = 24;
+
+const MILLISECONDS_PER_DAY =
+  MILLISECONDS_PER_SECOND *
+  SECONDS_PER_MINUTE *
+  MINUTES_PER_HOUR *
+  HOURS_PER_DAY;
 
 class ExDate extends Date {
   setTime(h = 0, m = 0, s = 0, ms = 0) {
@@ -31,17 +32,6 @@ class ExDate extends Date {
     return this;
   }
   isWithinLast24Hours(date) {
-    const MILLISECONDS_PER_SECOND = 1000;
-    const SECONDS_PER_MINUTE = 60;
-    const MINUTES_PER_HOUR = 60;
-    const HOURS_PER_DAY = 24;
-
-    const MILLISECONDS_PER_DAY =
-      MILLISECONDS_PER_SECOND *
-      SECONDS_PER_MINUTE *
-      MINUTES_PER_HOUR *
-      HOURS_PER_DAY;
-
     return (date - this) / MILLISECONDS_PER_DAY < 1;
   }
 }
@@ -68,7 +58,14 @@ function postDiscord(message) {
 }
 
 function main() {
-  const atomXml = UrlFetchApp.fetch(ATOM_URL, options).getContentText();
+  const atomXml = UrlFetchApp.fetch(ATOM_URL, {
+    method: "GET",
+    headers: {
+      Authorization:
+        " Basic " + Utilities.base64Encode(USER_ID + ":" + PASSWORD),
+    },
+    muteHttpExceptions: true,
+  }).getContentText();
   const document = XmlService.parse(atomXml);
   const root = document.getRootElement();
   const ns = XmlService.getNamespace("http://purl.org/atom/ns#");
