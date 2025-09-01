@@ -4,7 +4,7 @@
 
 ## 概要
 
-このプロジェクトは、LINE Notify のサービスが終了したため、以前作成した[blog_notify](https://github.com/motonum/blog_notify/)の通知先を Discord に変更した後継版です。
+このプロジェクトは、以前作成した[blog_notify](https://github.com/motonum/blog_notify/)の通知先を Discord に変更した後継版です。(LINE Notify のサービスが終了したため)
 
 今回のアップデートにあたり、単に通知先を変更するだけでなく、以下の改善を加えました。
 
@@ -32,11 +32,11 @@
 
 ### 2. 実行（Google Apps Script 環境）
 
-1.  ビルドで生成された`gas/main.js`を Google Apps Script プロジェクトに`bin/deploy.sh`にてデプロイします。
-2.  GAS の**時間主導型トリガー**が毎日定刻に`main`関数を実行します。
-3.  `UrlFetchApp`サービスを使い、対象ブログの Atom フィードを取得します。
-4.  `XmlService`でフィードをパースし、最新記事の投稿日時を確認します。
-5.  投稿日時が 24 時間以内であれば、記事情報を整形し、Discord の Webhook URL へ POST リクエストを送信して通知を行います。
+1.  ビルドで生成された`gas/main.js`を Google Apps Script プロジェクトに`bin/deploy.sh`にてデプロイ。
+2.  GAS の日付ベースのタイマーによるトリガーの機能を使い、`refreshTrigger()`を実行することで GAS の**時間主導型トリガー**が毎日定刻に`main`関数を実行するよう設定。
+3.  `UrlFetchApp`サービスを使い、対象ブログの Atom フィードを取得。
+4.  `XmlService`でフィードをパースし、最新記事の投稿日時を確認。
+5.  投稿日時が 24 時間以内であれば、記事情報を整形し、Discord の Webhook URL へ POST リクエストを送信して通知を実行。
 
 ## 使用技術
 
